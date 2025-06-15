@@ -1,3 +1,4 @@
+// lib/presentation/expense_entry_screen/expense_entry_screen.dart
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:fluttertoast/fluttertoast.dart';
@@ -6,9 +7,7 @@ import 'dart:async';
 
 import '../../core/app_export.dart';
 import '../../theme/app_theme.dart';
-import './widgets/cancel_action_button_widget.dart';
 import './widgets/custom_numeric_keypad_widget.dart';
-import './widgets/quick_amount_buttons_widget.dart';
 
 class ExpenseEntryScreen extends StatefulWidget {
   const ExpenseEntryScreen({super.key});
@@ -25,9 +24,6 @@ class _ExpenseEntryScreenState extends State<ExpenseEntryScreen>
   late AnimationController _cancelButtonController;
   late Animation<double> _cancelButtonAnimation;
   Timer? _cancelButtonTimer;
-
-  // Mock quick amount presets
-  final List<double> _quickAmounts = [50.0, 100.0, 200.0, 500.0, 1000.0];
 
   @override
   void initState() {
@@ -80,13 +76,6 @@ class _ExpenseEntryScreenState extends State<ExpenseEntryScreen>
     HapticFeedback.lightImpact();
   }
 
-  void _onQuickAmountSelected(double amount) {
-    setState(() {
-      _currentAmount = _formatAmount(amount);
-    });
-    HapticFeedback.selectionClick();
-  }
-
   String _formatAmount(double amount) {
     String formatted = amount.toStringAsFixed(2);
     formatted = formatted.replaceAll('.', ',');
@@ -105,7 +94,7 @@ class _ExpenseEntryScreenState extends State<ExpenseEntryScreen>
       formattedInteger += integerPart[i];
     }
 
-    return '\$formattedInteger,\$decimalPart';
+    return '$formattedInteger,$decimalPart';
   }
 
   double _parseAmount() {
@@ -126,7 +115,7 @@ class _ExpenseEntryScreenState extends State<ExpenseEntryScreen>
     if (_isAmountValid()) {
       // Show success toast
       Fluttertoast.showToast(
-        msg: "Сумма введена: \$_currentAmount ₽",
+        msg: "Сумма введена: $_currentAmount ₽",
         toastLength: Toast.LENGTH_SHORT,
         gravity: ToastGravity.BOTTOM,
         backgroundColor: AppTheme.lightTheme.colorScheme.primary,
@@ -189,181 +178,114 @@ class _ExpenseEntryScreenState extends State<ExpenseEntryScreen>
           children: [
             Column(
               children: [
-                // Amount Display Section
-                Expanded(
-                  flex: 2,
-                  child: Container(
-                    width: double.infinity,
-                    padding:
-                        EdgeInsets.symmetric(horizontal: 6.w, vertical: 4.h),
-                    child: Column(
-                      mainAxisAlignment: MainAxisAlignment.center,
-                      children: [
-                        // Amount Display
-                        Container(
-                          width: double.infinity,
-                          padding: EdgeInsets.symmetric(vertical: 2.h),
-                          decoration: BoxDecoration(
-                            color: AppTheme
-                                .lightTheme.colorScheme.surfaceContainer,
-                            borderRadius: BorderRadius.circular(16),
-                            border: Border.all(
-                              color: AppTheme.lightTheme.colorScheme.outline
-                                  .withValues(alpha: 0.3),
-                            ),
-                          ),
-                          child: Column(
-                            children: [
-                              Text(
-                                'Сумма расхода',
-                                style: AppTheme.lightTheme.textTheme.bodyMedium
-                                    ?.copyWith(
-                                  color: AppTheme
-                                      .lightTheme.colorScheme.onSurfaceVariant,
-                                ),
-                              ),
-                              SizedBox(height: 1.h),
-                              Text(
-                                '\$_currentAmount ₽',
-                                style: AppTheme
-                                    .lightTheme.textTheme.displayMedium
-                                    ?.copyWith(
-                                  fontWeight: FontWeight.w600,
-                                  color:
-                                      AppTheme.lightTheme.colorScheme.onSurface,
-                                ),
-                                textAlign: TextAlign.center,
-                              ),
-                            ],
-                          ),
-                        ),
-
-                        SizedBox(height: 3.h),
-
-                        // Irregular Expense Toggle
-                        Container(
-                          width: double.infinity,
-                          padding: EdgeInsets.all(4.w),
-                          decoration: BoxDecoration(
-                            color: AppTheme
-                                .lightTheme.colorScheme.surfaceContainer,
-                            borderRadius: BorderRadius.circular(12),
-                            border: Border.all(
-                              color: AppTheme.lightTheme.colorScheme.outline
-                                  .withValues(alpha: 0.3),
-                            ),
-                          ),
-                          child: Row(
-                            children: [
-                              Checkbox(
-                                value: _isIrregularExpense,
-                                onChanged: (value) {
-                                  setState(() {
-                                    _isIrregularExpense = value ?? false;
-                                  });
-                                  HapticFeedback.selectionClick();
-                                },
-                                activeColor:
-                                    AppTheme.lightTheme.colorScheme.primary,
-                              ),
-                              SizedBox(width: 3.w),
-                              Expanded(
-                                child: Text(
-                                  'Нерегулярный расход',
-                                  style: AppTheme.lightTheme.textTheme.bodyLarge
-                                      ?.copyWith(
-                                    color: AppTheme
-                                        .lightTheme.colorScheme.onSurface,
-                                  ),
-                                ),
-                              ),
-                            ],
-                          ),
-                        ),
-
-                        SizedBox(height: 2.h),
-
-                        // Quick Amount Buttons
-                        QuickAmountButtonsWidget(
-                          amounts: _quickAmounts,
-                          onAmountSelected: _onQuickAmountSelected,
-                        ),
-                      ],
+                // Заголовок
+                Padding(
+                  padding: EdgeInsets.only(top: 2.h, bottom: 1.h),
+                  child: Text(
+                    'Учет расходов',
+                    style:
+                        AppTheme.lightTheme.textTheme.headlineMedium?.copyWith(
+                      fontWeight: FontWeight.w600,
+                      color: AppTheme.lightTheme.colorScheme.onSurface,
                     ),
                   ),
                 ),
 
-                // Keypad and Next Button Section
+                // Поле ввода суммы
+                Container(
+                  width: double.infinity,
+                  margin: EdgeInsets.symmetric(horizontal: 6.w, vertical: 2.h),
+                  padding: EdgeInsets.symmetric(vertical: 2.h),
+                  decoration: BoxDecoration(
+                    color: AppTheme.lightTheme.colorScheme.surfaceContainer,
+                    borderRadius: BorderRadius.circular(16),
+                    border: Border.all(
+                      color: AppTheme.lightTheme.colorScheme.outline
+                          .withValues(alpha: 0.3),
+                    ),
+                  ),
+                  child: Text(
+                    // При amount == 0 показываем «0 ₽» (не «$_currentAmount ₽»)
+                    _parseAmount() == 0 ? '0 ₽' : '$_currentAmount ₽',
+                    style:
+                        AppTheme.lightTheme.textTheme.displayMedium?.copyWith(
+                      fontWeight: FontWeight.w600,
+                      color: AppTheme.lightTheme.colorScheme.onSurface,
+                    ),
+                    textAlign: TextAlign.center,
+                  ),
+                ),
+
+                // Цифровая клавиатура (центр экрана)
                 Expanded(
                   flex: 3,
-                  child: Container(
-                    width: double.infinity,
+                  child: Padding(
                     padding: EdgeInsets.symmetric(horizontal: 6.w),
-                    child: Column(
-                      mainAxisAlignment: MainAxisAlignment.center,
-                      children: [
-                        // Custom Numeric Keypad
-                        Expanded(
-                          child: CustomNumericKeypadWidget(
-                            onInput: _onKeypadInput,
-                          ),
-                        ),
-
-                        SizedBox(height: 2.h),
-
-                        // Next Button
-                        SizedBox(
-                          width: double.infinity,
-                          height: 6.h,
-                          child: ElevatedButton(
-                            onPressed: _isAmountValid() ? _onNextPressed : null,
-                            style: ElevatedButton.styleFrom(
-                              backgroundColor: _isAmountValid()
-                                  ? AppTheme.lightTheme.colorScheme.primary
-                                  : AppTheme.lightTheme.colorScheme.outline,
-                              foregroundColor: Colors.white,
-                              elevation: _isAmountValid() ? 3 : 0,
-                              shape: RoundedRectangleBorder(
-                                borderRadius: BorderRadius.circular(12),
-                              ),
-                            ),
-                            child: Text(
-                              'Далее',
-                              style: AppTheme.lightTheme.textTheme.titleMedium
-                                  ?.copyWith(
-                                color: Colors.white,
-                                fontWeight: FontWeight.w600,
-                              ),
-                            ),
-                          ),
-                        ),
-
-                        SizedBox(height: 2.h),
-                      ],
+                    child: CustomNumericKeypadWidget(
+                      onInput: _onKeypadInput,
                     ),
+                  ),
+                ),
+
+                // Кнопки внизу
+                Padding(
+                  padding: EdgeInsets.symmetric(horizontal: 6.w, vertical: 2.h),
+                  child: Column(
+                    children: [
+                      // Кнопка Далее
+                      SizedBox(
+                        width: double.infinity,
+                        height: 6.h,
+                        child: ElevatedButton(
+                          onPressed: _isAmountValid() ? _onNextPressed : null,
+                          style: ElevatedButton.styleFrom(
+                            backgroundColor: _isAmountValid()
+                                ? AppTheme.lightTheme.colorScheme.primary
+                                : AppTheme.lightTheme.colorScheme.outline,
+                            foregroundColor: Colors.white,
+                            elevation: _isAmountValid() ? 3 : 0,
+                            shape: RoundedRectangleBorder(
+                              borderRadius: BorderRadius.circular(12),
+                            ),
+                          ),
+                          child: Text(
+                            'Далее',
+                            style: AppTheme.lightTheme.textTheme.titleMedium
+                                ?.copyWith(
+                              color: Colors.white,
+                              fontWeight: FontWeight.w600,
+                            ),
+                          ),
+                        ),
+                      ),
+
+                      // Кнопка отмены (видна 30 секунд после ввода)
+                      if (_showCancelButton)
+                        Padding(
+                          padding: EdgeInsets.only(top: 1.h),
+                          child: SizedBox(
+                            width: double.infinity,
+                            height: 5.h,
+                            child: TextButton(
+                              onPressed: _onCancelLastAction,
+                              child: Text(
+                                'Отменить последнее действие',
+                                style: AppTheme.lightTheme.textTheme.bodyLarge
+                                    ?.copyWith(
+                                  color: AppTheme.lightTheme.colorScheme.error,
+                                  fontWeight: FontWeight.w500,
+                                ),
+                              ),
+                            ),
+                          ),
+                        ),
+
+                      SizedBox(height: 1.h),
+                    ],
                   ),
                 ),
               ],
             ),
-
-            // Cancel Last Action Button
-            if (_showCancelButton)
-              AnimatedBuilder(
-                animation: _cancelButtonAnimation,
-                builder: (context, child) {
-                  return Positioned(
-                    top: 2.h,
-                    right: 4.w,
-                    child: Transform.scale(
-                      scale: _cancelButtonAnimation.value,
-                      child: CancelActionButtonWidget(
-                        onPressed: _onCancelLastAction,
-                        remainingSeconds: 30,
-                      ),
-                    ),
-                  );
-                },
-              ),
           ],
         ),
       ),

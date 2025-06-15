@@ -3,12 +3,19 @@ import 'package:flutter/services.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:sizer/sizer.dart';
 
-import '../widgets/custom_error_widget.dart';
+import './services/database_service.dart';
+import './widgets/custom_error_widget.dart';
 import 'core/app_export.dart';
+
+// lib/main.dart
 
 void main() async {
   await dotenv.load();
   WidgetsFlutterBinding.ensureInitialized();
+
+  // Инициализация базы данных при запуске приложения
+  await DatabaseService().database;
+
   ErrorWidget.builder = (FlutterErrorDetails details) {
     return CustomErrorWidget(
       errorDetails: details,
@@ -42,7 +49,8 @@ class MyApp extends StatelessWidget {
         },
         debugShowCheckedModeBanner: false,
         routes: AppRoutes.routes,
-        initialRoute: AppRoutes.initial,
+        initialRoute: AppRoutes
+            .expenseEntryScreen, // Изменено с AppRoutes.initial на прямой переход к экрану ввода расходов
       );
     });
   }

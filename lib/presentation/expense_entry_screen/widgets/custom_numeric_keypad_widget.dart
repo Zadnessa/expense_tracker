@@ -4,6 +4,8 @@ import 'package:sizer/sizer.dart';
 
 import '../../../core/app_export.dart';
 
+// lib/presentation/expense_entry_screen/widgets/custom_numeric_keypad_widget.dart
+
 class CustomNumericKeypadWidget extends StatelessWidget {
   final Function(String) onInput;
 
@@ -69,20 +71,6 @@ class CustomNumericKeypadWidget extends StatelessWidget {
                 _buildKeypadButton('0'),
                 SizedBox(width: 2.w),
                 _buildKeypadButton('delete', isSpecial: true),
-              ],
-            ),
-          ),
-          SizedBox(height: 2.w),
-
-          // Fifth row: Decimal comma
-          Expanded(
-            child: Row(
-              children: [
-                Expanded(child: Container()),
-                SizedBox(width: 2.w),
-                _buildKeypadButton(','),
-                SizedBox(width: 2.w),
-                Expanded(child: Container()),
               ],
             ),
           ),
