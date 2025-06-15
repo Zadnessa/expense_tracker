@@ -15,7 +15,7 @@ class AppRoutes {
   static const String expenseHistoryScreen = '/expense-history-screen';
   static const String analyticsDashboardScreen = '/analytics-dashboard-screen';
   static const String settingsScreen = '/settings-screen';
-
+}
   static Map<String, WidgetBuilder> routes = {
     initial: (context) => const MainScreen(),
     mainScreen: (context) => const MainScreen(),
