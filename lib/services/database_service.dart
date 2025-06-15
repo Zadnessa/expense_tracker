@@ -383,7 +383,8 @@ class DatabaseService {
 
   Future<List<Map<String, dynamic>>> getCategories() async {
     final db = await database;
-    return await db.query('categories', orderBy: 'name');
+    final result = await db.query('categories', orderBy: 'name');
+    return List<Map<String, dynamic>>.from(result.map((item) => Map<String, dynamic>.from(item)));
   }
 
   Future<Map<String, dynamic>?> getCategory(String id) async {
