@@ -64,9 +64,13 @@ class _CategorySelectionScreenState extends State<CategorySelectionScreen>
           await _categoryService.getAllCategoriesWithSubcategories();
 
       setState(() {
-        categories = List<Map<String, dynamic>>.from(loadedCategories);
-        isLoadingCategories = false;
-      });
+        categories = loadedCategories.map((category) {
+          Map<String, dynamic> newCategory = Map<String, dynamic>.from(category);
+          newCategory['subcategories'] = List<Map<String, dynamic>>.from(category['subcategories'] ?? []);
+          return newCategory;
+        }).toList();
+    isLoading = false;
+  });
     } catch (e) {
       setState(() {
         isLoadingCategories = false;
