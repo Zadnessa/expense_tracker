@@ -84,7 +84,7 @@ class _CategorySelectionScreenState extends State<CategorySelectionScreen>
             textColor: Colors.white);
       }
     }
-
+  }
   @override
   void dispose() {
     _animationController.dispose();
