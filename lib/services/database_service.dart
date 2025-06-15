@@ -425,12 +425,13 @@ class DatabaseService {
 
   Future<List<Map<String, dynamic>>> getSubcategories(String categoryId) async {
     final db = await database;
-    return await db.query(
+    final result = await db.query(
       'subcategories',
       where: 'category_id = ?',
       whereArgs: [categoryId],
       orderBy: 'name',
     );
+    return List<Map<String, dynamic>>.from(result.map((item) => Map<String, dynamic>.from(item)));
   }
 
   Future<Map<String, dynamic>?> getSubcategory(String id) async {
