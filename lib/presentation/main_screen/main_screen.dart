@@ -18,17 +18,13 @@ class _MainScreenState extends State<MainScreen> {
   int _currentIndex = 0;
 
   final List<Widget> _screens = [
-    const AnalyticsDashboardScreen(),
     const ExpenseEntryScreen(),
     const ExpenseHistoryScreen(),
+    const AnalyticsDashboardScreen(),
     const SettingsScreen(),
   ];
 
   final List<BottomNavigationBarItem> _bottomNavItems = [
-    const BottomNavigationBarItem(
-      icon: Icon(Icons.analytics),
-      label: 'Аналитика',
-    ),
     const BottomNavigationBarItem(
       icon: Icon(Icons.add_circle),
       label: 'Добавить',
@@ -36,6 +32,10 @@ class _MainScreenState extends State<MainScreen> {
     const BottomNavigationBarItem(
       icon: Icon(Icons.history),
       label: 'История',
+    ),
+    const BottomNavigationBarItem(
+      icon: Icon(Icons.analytics),
+      label: 'Аналитика',
     ),
     const BottomNavigationBarItem(
       icon: Icon(Icons.settings),
