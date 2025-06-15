@@ -22,7 +22,7 @@ class CategoryFilterBottomSheet extends StatefulWidget {
 class _CategoryFilterBottomSheetState extends State<CategoryFilterBottomSheet> {
   late List<String> _selectedCategories;
 
-  static final List <Map<String, dynamic>> _categories = [
+  static final List<Map<String, dynamic>> _categories = [
     {'name': 'Продукты', 'color': Color(0xFF4CAF50)},
     {'name': 'Питание вне дома', 'color': Color(0xFFFF9800)},
     {'name': 'Транспорт', 'color': Color(0xFF2196F3)},
