@@ -12,19 +12,32 @@ class CategoryService {
   // Получение всех категорий с подкатегориями
   Future<List<Map<String, dynamic>>> getAllCategoriesWithSubcategories() async {
     // Получаем все категории
-    List<Map<String, dynamic>> categories =
-        await _databaseService.getCategories();
+    List<Map<String, dynamic>> categories = await _databaseService.getCategories();
 
-    // Для каждой категории загружаем подкатегории
+    // Для каждой категории загружаем подкатегории и создаем полностью изменяемые копии
+    List<Map<String, dynamic>> mutableCategories = [];
+    
     for (int i = 0; i < categories.length; i++) {
       String categoryId = categories[i]['id'];
-      List<Map<String, dynamic>> subcategories =
-          await _databaseService.getSubcategories(categoryId);
-      categories[i]['subcategories'] = subcategories;
-      categories[i]['color'] = Color(categories[i]['color']);
+      List<Map<String, dynamic>> subcategories = await _databaseService.getSubcategories(categoryId);
+      
+      // Создаем полностью изменяемую копию категории
+      Map<String, dynamic> mutableCategory = <String, dynamic>{};
+      categories[i].forEach((key, value) {
+        mutableCategory[key] = value;
+      });
+      
+      // Создаем изменяемый список подкатегорий
+      mutableCategory['subcategories'] = <Map<String, dynamic>>[];
+      for (var sub in subcategories) {
+        mutableCategory['subcategories'].add(Map<String, dynamic>.from(sub));
+      }
+      
+      mutableCategory['color'] = Color(mutableCategory['color']);
+      mutableCategories.add(mutableCategory);
     }
 
-    return categories;
+    return mutableCategories;
   }
 
   // Добавление пользовательской категории
