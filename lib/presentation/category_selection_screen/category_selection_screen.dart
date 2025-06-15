@@ -131,7 +131,7 @@ class _CategorySelectionScreenState extends State<CategorySelectionScreen>
       // Navigate back to expense entry screen
       if (mounted) {
         Navigator.pushNamedAndRemoveUntil(
-            context, '/expense-entry-screen', (route) => false);
+            context, '/', (route) => false);
       }
     } catch (e) {
       // Handle error
