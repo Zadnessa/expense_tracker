@@ -69,20 +69,21 @@ class _CategorySelectionScreenState extends State<CategorySelectionScreen>
           newCategory['subcategories'] = List<Map<String, dynamic>>.from(category['subcategories'] ?? []);
           return newCategory;
         }).toList();
-    isLoading = false;
+    isLoadingCategories = false;
   });
     } catch (e) {
-      setState(() {
-        isLoadingCategories = false;
-      });
-      Fluttertoast.showToast(
-          msg: "Ошибка загрузки категорий: $e",
-          toastLength: Toast.LENGTH_LONG,
-          gravity: ToastGravity.BOTTOM,
-          backgroundColor: AppTheme.lightTheme.colorScheme.error,
-          textColor: Colors.white);
+      if (mounted) {
+        setState(() {
+          isLoadingCategories = false;
+        });
+        Fluttertoast.showToast(
+            msg: "Ошибка загрузки категорий: $e",
+            toastLength: Toast.LENGTH_LONG,
+            gravity: ToastGravity.BOTTOM,
+            backgroundColor: AppTheme.lightTheme.colorScheme.error,
+            textColor: Colors.white);
+      }
     }
-  }
 
   @override
   void dispose() {
