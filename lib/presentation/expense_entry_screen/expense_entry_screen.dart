@@ -126,8 +126,7 @@ class _ExpenseEntryScreenState extends State<ExpenseEntryScreen>
       _showCancelButtonWithTimer();
 
       // Navigate to category selection
-      Navigator.pushNamed(context, '/category-selection-screen');
-    }
+      Navigator.pushNamed(context, '/category-selection-screen', arguments: {'amount': _currentAmount});    }
   }
 
   void _showCancelButtonWithTimer() {
